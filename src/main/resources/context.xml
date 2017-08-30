@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <beans>
-        <bean id="shakeSpear" class="com.db.quaters.ShakeSpearQuoter">
-            <property name = "message" value = "Be or not to be"/>
-        </bean>
-        <bean id="stringQuote" class="java.lang.String">
-            <constructor-arg value="Trust me!"/>
-        </bean>
-        <bean id="terminator" class="com.db.quaters.TerminatorQuoter">
-            <property name = "messages">
-                <list>
-                    <value>"I will be back"</value>
-                    <ref bean="stringQuote"/>
-                    <value>"Astalavista, baby"</value>
-                </list>
-            </property>
-        </bean>
-        <bean id="talkingRobot" class="com.db.quaters.TalkingRobotImpl">
-            <property name = "quoterList">
-                <list>
-                    <ref bean = "terminator"/>
-                    <ref bean = "shakeSpear"/>
-                </list>
-            </property>
-        </bean>
-        <bean id="commonAnnotationBeanPostProcessor" class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"></bean>
-        <bean id="injectRandomIntLogic" class="com.db.quaters.InjectRandomIntLogic">
-        </bean>
-    </beans>
+    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
+    <bean class="com.db.quoters.bpp.InjectRandomIntAnnotationBeanPostProcessor"/>
+    <bean class="com.db.quoters.bpp.BeanDefinitionCorrectnessSentinelBeanFactoryPostProcessor"/>
+    <bean class="com.db.quoters.bpp.DeprecatedClassBeanFactoryPostProcessor"/>
 
+    <bean id="anotherQuote" class="java.lang.String">
+        <constructor-arg value="Astalista baby"/>
+    </bean>
+
+    <bean id="shakespeareQuoter" class="com.db.quoters.ShakespeareQuoter">
+        <property name="message" value="2 b || ! 2 B"/>
+    </bean>
+
+    <bean id="terminatorQuoter" class="com.db.quoters.TerminatorQuoter" destroy-method="killAll">
+        <property name="messages">
+            <list value-type="java.lang.String">
+                <value>I need your close</value>
+                <ref bean="anotherQuote"/>
+                <value>I'll be back</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="robot" class="com.db.quoters.TalkingRobotImpl">
+        <property name="quoters">
+            <list>
+                <ref bean="shakespeareQuoter"/>
+                <ref bean="terminatorQuoter"/>
+            </list>
+        </property>
+    </bean>
 </beans>
