@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <beans>
+        <bean id="shakeSpear" class="com.db.quaters.ShakeSpearQuoter">
+            <property name = "message" value = "Be or not to be"/>
+        </bean>
+        <bean id="terminator" class="com.db.quaters.TerminatorQuoter">
+            <property name = "messages">
+                <list>
+                    <value>"I will be back"</value>
+                    <value>"Astalavista, baby"</value>
+                </list>
+            </property>
+        </bean>
+        <bean id="talkingRobot" class="com.db.quaters.TalkingRobotImpl"
+              init-method="talk">
+            <property name = "quoterList">
+                <list>
+                    <ref bean = "terminator"/>
+                    <ref bean = "shakeSpear"/>
+                </list>
+            </property>
+        </bean>
+    </beans>
+
+</beans>
